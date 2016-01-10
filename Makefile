@@ -43,7 +43,6 @@ stencils/VelocityBufferFillStencil.o \
 stencils/VelocityBufferReadStencil.o \
 stencils/ViscosityBufferFillStencil.o\
 stencils/ViscosityBufferReadStencil.o\
-stencils/CenterLineVelocityBufferFillStencil.o\
 stencils/TurbulentViscosityStencil.o \
 stencils/TurbulentViscosityBoundaryStencil.o \
 parallelManagers/PetscParallelManager.o\

@@ -4,8 +4,6 @@
 #include "PetscParallelManager.h"
 #include "../stencils/ViscosityBufferFillStencil.h"
 #include "../stencils/ViscosityBufferReadStencil.h"
-#include "../stencils/CenterLineVelocityBufferFillStencil.h"
-//#include "../TurbulentFlowField.h"
 
 class PetscParallelManagerTurbulent: public PetscParallelManager {
 
@@ -28,13 +26,10 @@ class PetscParallelManagerTurbulent: public PetscParallelManager {
   FLOAT *_centerLineBuffer;
 
   ViscosityBufferFillStencil _viscosityBufferFillStencil;
-	ViscosityBufferReadStencil _viscosityBufferReadStencil;
-  CenterLineVelocityBufferFillStencil _centerLineVelocityFillStencil;
+  ViscosityBufferReadStencil _viscosityBufferReadStencil;
 
   ParallelBoundaryIterator<TurbulentFlowField> _viscosityBufferFillIterator;
   ParallelBoundaryIterator<TurbulentFlowField> _viscosityBufferReadIterator;
-  ParallelBoundaryIterator<TurbulentFlowField> _centerLineVelocityFillIterator;
-
 
   public:
 

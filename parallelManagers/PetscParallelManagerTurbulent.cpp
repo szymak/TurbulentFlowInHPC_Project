@@ -25,14 +25,10 @@ PetscParallelManagerTurbulent::PetscParallelManagerTurbulent(TurbulentFlowField 
   _viscosityBufferFillStencil(parameters, _viscositySendBufferLeftWall, _viscositySendBufferRightWall, _viscositySendBufferTopWall, _viscositySendBufferBottomWall, _viscositySendBufferFrontWall, _viscositySendBufferBackWall),
   _viscosityBufferReadStencil(parameters, _viscosityRecvBufferLeftWall, _viscosityRecvBufferRightWall, _viscosityRecvBufferTopWall, _viscosityRecvBufferBottomWall, _viscosityRecvBufferFrontWall, _viscosityRecvBufferBackWall),
 
-  _centerLineVelocityFillStencil(parameters, _centerLineBuffer),
-
-
   //Iterators
   _viscosityBufferFillIterator(flowField, parameters, _viscosityBufferFillStencil),
-  _viscosityBufferReadIterator(flowField, parameters, _viscosityBufferReadStencil),
+  _viscosityBufferReadIterator(flowField, parameters, _viscosityBufferReadStencil)
 
-  _centerLineVelocityFillIterator(flowField, parameters, _centerLineVelocityFillStencil,0,0)
 {
 
 }
@@ -72,14 +68,8 @@ void PetscParallelManagerTurbulent::communicateViscosity() {
 
 
 void PetscParallelManagerTurbulent::communicateCenterLineVelocity() {
-  // buffer fill . iterate  for centerline
-/*  if (_parameters.parallel.centerlineFlag)
-  {
-      _centerLineVelocityFillIterator.iterate();
-  }
 
-  */
-  if (_parameters.parallel.centerlineFlag && _parameters.geometry.dim == 2)
+ if (_parameters.parallel.centerlineFlag && _parameters.geometry.dim == 2)
     {
   	for(int i = 0; i < _flowField.getCellsX(); i++) {
   		_centerLineBuffer[i] = _flowField.getVelocity().getVector(i, _parameters.parallel.local_center_line_index[1])[0];
