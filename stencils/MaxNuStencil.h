@@ -18,8 +18,6 @@ class MaxNuStencil : public FieldStencil<TurbulentFlowField>, public BoundarySte
     private:
 
         FLOAT _maxValue;  //! Stores the maximum module of every component
-        FLOAT _factor; // 1/dx + 1/dy + 1/dz
-        FLOAT _Re;
 
         /** Sets the maximum value arrays to the value of the cell if it surpasses the current one.
          *
@@ -82,7 +80,6 @@ class MaxNuStencil : public FieldStencil<TurbulentFlowField>, public BoundarySte
         /** Resets the maximum values to zero before computing the timestep
          */
         void reset ();
-        void loadFactor (FLOAT factor);
 
         /** Returns the array with the maximum modules of the components of the velocity,
          *  divided by the respective local meshsize

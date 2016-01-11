@@ -58,10 +58,6 @@ void TurbulentSimulation::setTimeStep(){
 	FLOAT factor = 1.0/(_parameters.meshsize->getDxMin() * _parameters.meshsize->getDxMin()) +
 		         1.0/(_parameters.meshsize->getDyMin() * _parameters.meshsize->getDyMin());
 
-	if (_parameters.geometry.dim == 3) {
-	factor += 1.0/(_parameters.meshsize->getDzMin() * _parameters.meshsize->getDzMin());
-	}
-
 	// determine maximum velocity
 	_maxUStencil.reset();
 	_maxUFieldIterator.iterate();
@@ -72,13 +68,14 @@ void TurbulentSimulation::setTimeStep(){
 	_maxNuBoundaryIterator.iterate();
 
 	if (_parameters.geometry.dim == 3) {
+	factor += 1.0/(_parameters.meshsize->getDzMin() * _parameters.meshsize->getDzMin());
 	_parameters.timestep.dt = 1.0 / _maxUStencil.getMaxValues()[2];
 	} else {
 	_parameters.timestep.dt = 1.0 / _maxUStencil.getMaxValues()[0];
 	}
 
 	localMin = std::min(_parameters.timestep.dt,
-		                            std::min(std::min(_maxNuStencil.getMaxValue(),
+		                            std::min(std::min(1.0/(cinematicviscosity+_maxNuStencil.getMaxValue())/(2*factor),
 		                            1.0 / _maxUStencil.getMaxValues()[0]),
 		                            1.0 / _maxUStencil.getMaxValues()[1]));
 
