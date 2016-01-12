@@ -125,7 +125,7 @@ int main (int argc, char *argv[]) {
     // STOP: finish measurement
     if (rank == 0) {
     	end = clock();
-    	std::cout << "TOTAL TIME: " << (float)(end-start) / CLOCKS_PER_SEC << std::endl;
+    	std::cout << "TOTAL TIME(" << nproc << "): " << (float)(end-start) / CLOCKS_PER_SEC << std::endl;
     }
     // TODO WS1: plot final output
     simulation->plotVTK(timeSteps, foldername.str());
@@ -139,6 +139,16 @@ int main (int argc, char *argv[]) {
         source.close();
         dest.close();
     }
+    if (rank == 0) {
+        /* Copy the gmon file in the results folder */
+        const char* fileName = "/gmon.out";
+        std::ifstream source("gmon.out", std::ios::binary);
+        std::ofstream dest(foldername.str().append(fileName).c_str(), std::ios::binary);
+        dest << source.rdbuf();
+        source.close();
+        dest.close();
+    }
+
 
     PetscFinalize();
 
