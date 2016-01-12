@@ -19,9 +19,9 @@ endif
 #
 #
 CC = mpiCC
-CFLAGS =  -Werror -O3 -pg
+CFLAGS =  -Werror -O3 -pg -fopenmp
 SRCDIR = ./
-INCLUDE = -I. -Istencils ${PETSC_CC_INCLUDES} -pg
+INCLUDE = -I. -Istencils ${PETSC_CC_INCLUDES} -pg -fopenmp
 
 
 NSMAIN = main.o
