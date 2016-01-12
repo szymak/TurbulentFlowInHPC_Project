@@ -14,7 +14,7 @@ class TurbulentSimulation : public Simulation {
 
 	protected:
 		TurbulentFlowField &_turbulentFlowField;
-    	FieldIterator<TurbulentFlowField> _turbulentFghIterator;
+    	OMPIterator<TurbulentFlowField> _turbulentFghIterator;
 		TurbulenceFGHStencil _turbulentFghStencil;
     	FieldIterator<TurbulentFlowField> _turbulentVtkIterator;
 		TurbulentVTKStencil _turbulentVtkStencil;
