@@ -6,13 +6,13 @@
       <boundary_layer>turbulent</boundary_layer>
         <scenario>channel</scenario>
     </simulation>
-    <backwardFacingStep xRatio="0.5" yRatio="0.5" />
+    <backwardFacingStep xRatio="0.5" yRatio="0.2" />
     <timestep dt="1" tau="0.5" />
     <solver gamma="0.5" />
     <geometry
       dim="3"
       lengthX="5.0" lengthY="1.0" lengthZ="1.0"
-      sizeX="40" sizeY="20" sizeZ="20"
+      sizeX="50" sizeY="20" sizeZ="10"
       stretchX="false" stretchY="true" stretchZ="true"
     >
       <mesh>uniform</mesh>
@@ -39,7 +39,7 @@
             <vector x="0" y="0" z="0" />
         </back>
     </walls>
-    <vtk interval="0.0001">channel_result</vtk>
-    <stdOut interval="0.0001" />
-    <parallel numProcessorsX="4" numProcessorsY="4" numProcessorsZ="4" />
+    <vtk interval="10.0">channel_result</vtk>
+    <stdOut interval="0.1" />
+    <parallel numProcessorsX="1" numProcessorsY="1" numProcessorsZ="1" />
 </configuration>
