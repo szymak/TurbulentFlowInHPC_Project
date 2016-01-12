@@ -3,7 +3,7 @@
 
 #include "Stencil.h"
 #include "Parameters.h"
-
+#include <omp.h>
 
 /** Iterator class
  *

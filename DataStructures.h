@@ -2,6 +2,7 @@
 #define _DATA_STRUCTURES_H_
 
 #include "Definitions.h"
+#include <omp.h>
 
 /** Storage of a scalar field
  *

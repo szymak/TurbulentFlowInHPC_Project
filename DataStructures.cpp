@@ -35,9 +35,10 @@ void ScalarField::show(const std::string title){
 }
 
 void ScalarField::initialize () {
-    for ( int i = 0; i < _size; i++ ){
-        _data[i] = 0.0;
-    }
+	#pragma omp parallel for schedule(static)
+		for ( int i = 0; i < _size; i++ ){
+			_data[i] = 0.0;
+		}
 }
 
 
@@ -85,9 +86,10 @@ void VectorField::show(const std::string title){
 }
 
 void VectorField::initialize () {
-    for ( int i = 0; i < _size; i++ ){
-        _data[i] = 0.0;
-    }
+	#pragma omp parallel for schedule(static)
+		for ( int i = 0; i < _size; i++ ){
+			_data[i] = 0.0;
+		}
 }
 
 //----------------------------------------------------------------------------
@@ -104,9 +106,10 @@ IntScalarField::IntScalarField ( int Nx, int Ny, int Nz ) : Field<int> ( Nx, Ny,
 
 
 void IntScalarField::initialize () {
-    for ( int i = 0; i < _size; i++ ){
-        _data[i] = 0;
-    }
+	#pragma omp parallel for schedule(static)
+		for ( int i = 0; i < _size; i++ ){
+			_data[i] = 0;
+		}
 }
 
 
