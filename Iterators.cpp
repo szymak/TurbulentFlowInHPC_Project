@@ -1,5 +1,3 @@
-
-
 template<class FlowField>
 FieldIterator<FlowField>::FieldIterator (FlowField & flowField, const Parameters& parameters, FieldStencil<FlowField> & stencil,
                                int lowOffset, int highOffset):
@@ -62,11 +60,7 @@ void OMPIterator<FlowField>::iterate (){
         }
     }
 
-    if (Iterator<FlowField>::_parameters.geometry.dim == 3){
-		#pragma omp parallel {
-			//FieldStencil<FlowField> & local_stencil=_stencil;
-			#pragma omp barrier
-	
+    if (Iterator<FlowField>::_parameters.geometry.dim == 3){	
 	        for (int k = 1 + _lowOffset; k < cellsZ - 1 + _highOffset; k++){
 		    	//black    
 		        #pragma omp for schedule (static)
@@ -82,8 +76,7 @@ void OMPIterator<FlowField>::iterate (){
 		                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
 		                }
 		            }
-	        }
-		}
+	        }	
     }
     
 }
