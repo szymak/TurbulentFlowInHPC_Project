@@ -22,7 +22,8 @@ int main (int argc, char *argv[]) {
     // ---------------------------------------------------
     int rank;   // This processor's identifier
     int nproc;  // Number of processors in the group
-    clock_t start, end; // Variables to measure elapsed time
+    FLOAT totalTime; // Variables to measure elapsed time
+    SimpleTimer timer;
     PetscInitialize(&argc, &argv, "petsc_commandline_arg", PETSC_NULL);
     MPI_Comm_size(PETSC_COMM_WORLD, &nproc);
     MPI_Comm_rank(PETSC_COMM_WORLD, &rank);
@@ -96,7 +97,7 @@ int main (int argc, char *argv[]) {
 
     // START: measure program time
     if (rank == 0) {   
-    	start = clock(); 
+    	timer.start(); 
 	}
     // time loop
     while (time < parameters.simulation.finalTime){
@@ -124,8 +125,8 @@ int main (int argc, char *argv[]) {
 
     // STOP: finish measurement
     if (rank == 0) {
-    	end = clock();
-    	std::cout << "TOTAL TIME(" << nproc << "): " << (float)(end-start) / CLOCKS_PER_SEC << std::endl;
+        totalTime = timer.getTimeAndRestart();
+    	std::cout << "TOTAL TIME(" << nproc << "): " << totalTime  << std::endl;
     }
     // TODO WS1: plot final output
     simulation->plotVTK(timeSteps, foldername.str());
