@@ -9,6 +9,7 @@
 #SBATCH --partition=snb
 #SBATCH --ntasks=64 # 8 nodes * 64 processes per node = 512
 #SBATCH --cpus-per-task=1 # one thread per process
+# #SBATCH --ntasks-per-core=4
 #SBATCH --mail-type=end
 #SBATCH --mail-user=something@tum.de
 #SBATCH --export=NONE
@@ -16,10 +17,10 @@
 source /etc/profile.d/modules.sh
 # -ppn = processes per node
 # -n   = total number of processes
-mpiexec.hydra -genv OMP_NUM_THREADS 1 -n 64 ./ns conf_channel_Turbulent64.xml
-mpiexec.hydra -genv OMP_NUM_THREADS 1 -n 32 ./ns conf_channel_Turbulent32.xml
-mpiexec.hydra -genv OMP_NUM_THREADS 1 -n 16 ./ns conf_channel_Turbulent16.xml
-mpiexec.hydra -genv OMP_NUM_THREADS 1 -n 8 ./ns conf_channel_Turbulent8.xml
-mpiexec.hydra -genv OMP_NUM_THREADS 1 -n 4 ./ns conf_channel_Turbulent4.xml
-mpiexec.hydra -genv OMP_NUM_THREADS 1 -n 2 ./ns conf_channel_Turbulent2.xml
-mpiexec.hydra -genv OMP_NUM_THREADS 1 -n 1 ./ns conf_channel_Turbulent.xml
+#mpiexec.hydra -genv OMP_NUM_THREADS $1 -n 64 ./ns conf_channel_Turbulent64.xml
+#mpiexec.hydra -genv OMP_NUM_THREADS $1 -n 32 ./ns conf_channel_Turbulent32.xml
+mpiexec.hydra -genv OMP_NUM_THREADS $1 -n 16 ./ns conf_channel_Turbulent16.xml
+mpiexec.hydra -genv OMP_NUM_THREADS $1 -n 8 ./ns conf_channel_Turbulent8.xml
+mpiexec.hydra -genv OMP_NUM_THREADS $1 -n 4 ./ns conf_channel_Turbulent4.xml
+mpiexec.hydra -genv OMP_NUM_THREADS $1 -n 2 ./ns conf_channel_Turbulent2.xml
+mpiexec.hydra -genv OMP_NUM_THREADS $1 -n 1 ./ns conf_channel_Turbulent.xml
