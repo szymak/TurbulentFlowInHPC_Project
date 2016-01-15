@@ -6,6 +6,10 @@ FieldStencil<TurbulentFlowField> ( parameters ){}
 
 void TurbulenceFGHStencil::apply ( TurbulentFlowField & flowField,  int i, int j ){
 
+    FLOAT _localVelocity           [ 27 * 3];
+    FLOAT _localMeshsize           [ 27 * 3];
+    FLOAT _localTurbulentViscosity [ 27 * 3];      //    TODO shoud I change it to 27 instead of 27*3
+
     // Load local variables into the local array
     loadLocalVelocity2D           ( flowField  , _localVelocity          , i, j);
     loadLocalMeshsize2D           ( _parameters, _localMeshsize          , i, j);
@@ -21,9 +25,14 @@ void TurbulenceFGHStencil::apply ( TurbulentFlowField & flowField,  int i, int j
 
 
 void TurbulenceFGHStencil::apply ( TurbulentFlowField & flowField, int i, int j, int k ){
-
+    
     const int obstacle = flowField.getFlags().getValue(i, j, k);
     FLOAT * const values = flowField.getFGH().getVector(i,j,k);
+
+    FLOAT _localVelocity           [ 27 * 3];
+    FLOAT _localMeshsize           [ 27 * 3];
+    FLOAT _localTurbulentViscosity [ 27 * 3];      //    TODO shoud I change it to 27 instead of 27*3
+
 
     if ((obstacle & OBSTACLE_SELF) == 0){   // If the cell is fluid
 
