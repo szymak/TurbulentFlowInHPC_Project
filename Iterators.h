@@ -84,6 +84,7 @@ class OMPIterator : public Iterator<FlowField> {
          * boundaries. Lower boundaries are not included.
          */
         void iterate ();
+        void apply (TurbulentFlowField & flowField, int i, int j, int k );
 };
 
 

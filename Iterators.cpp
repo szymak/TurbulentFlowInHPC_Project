@@ -66,14 +66,14 @@ void OMPIterator<FlowField>::iterate (){
 		        #pragma omp for schedule (static)
 		            for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
 		                for (int i = 1 + _lowOffset + (j + (k%2))%2; i < cellsX - 1 + _highOffset; i+=2){
-		                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
+		                    apply ( Iterator<FlowField>::_flowField, i, j, k );
 		                }
 		            }
 			  	//red
 				#pragma omp for schedule (static)
 		            for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
 		                for (int i = 2 + _lowOffset - (j + (k%2))%2; i < cellsX - 1 + _highOffset; i+=2){
-		                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
+		                    apply ( Iterator<FlowField>::_flowField, i, j, k );
 		                }
 		            }
 	        }	
@@ -81,6 +81,39 @@ void OMPIterator<FlowField>::iterate (){
     
 }
 
+
+template<class FlowField>
+void OMPIterator<FlowField>::apply (TurbulentFlowField & flowField, int i, int j, int k ){
+
+    const int obstacle = flowField.getFlags().getValue(i, j, k);
+    FLOAT * const values = flowField.getFGH().getVector(i,j,k);
+
+    FLOAT _localVelocity           [ 27 * 3];
+    FLOAT _localMeshsize           [ 27 * 3];
+    FLOAT _localTurbulentViscosity [ 27 * 3];      //    TODO shoud I change it to 27 instead of 27*3
+
+
+    if ((obstacle & OBSTACLE_SELF) == 0){   // If the cell is fluid
+
+        loadLocalVelocity3D(  flowField, _localVelocity,                      i, j, k);
+        loadLocalMeshsize3D(_parameters, _localMeshsize,                      i, j, k);
+        loadLocalTurbulentViscosity3D ( flowField , _localTurbulentViscosity, i, j, k);
+
+        if ((obstacle & OBSTACLE_RIGHT) == 0) { // If the right cell is fluid
+            values [0] = computeF3DTurbulence(_localVelocity, _localMeshsize,\
+                                              _localTurbulentViscosity, _parameters, _parameters.timestep.dt);
+        }
+        if ((obstacle & OBSTACLE_TOP) == 0) {
+            values [1] = computeG3DTurbulence(_localVelocity, _localMeshsize,\
+                                              _localTurbulentViscosity, _parameters, _parameters.timestep.dt);
+        }
+        if ((obstacle & OBSTACLE_BACK) == 0) {
+            values [2] = computeH3DTurbulence(_localVelocity, _localMeshsize,\
+                                              _localTurbulentViscosity, _parameters, _parameters.timestep.dt);
+        }
+    }
+
+}
 
 template<class FlowField>
 GlobalBoundaryIterator<FlowField>::GlobalBoundaryIterator(FlowField & flowField,
