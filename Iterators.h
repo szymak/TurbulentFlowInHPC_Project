@@ -3,7 +3,10 @@
 
 #include "Stencil.h"
 #include "Parameters.h"
+#include "TurbulentFlowField.h"
 #include <omp.h>
+#include "StencilFunctions.h"
+#include "Definitions.h"
 
 /** Iterator class
  *
