@@ -4,6 +4,7 @@
 #include "Stencil.h"
 #include "Parameters.h"
 #include <omp.h>
+#include "stencils/TurbulenceFGHStencil.h"
 
 /** Iterator class
  *

@@ -16,4 +16,4 @@
 source /etc/profile.d/modules.sh
 # -ppn = processes per node
 # -n   = total number of processes
-mpiexec.hydra -genv OMP_NUM_THREADS 1 -n $1 ./ns $2
+mpiexec.hydra -genv OMP_NUM_THREADS $2 -n $1 ./ns $3

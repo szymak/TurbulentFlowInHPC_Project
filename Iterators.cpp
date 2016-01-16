@@ -60,20 +60,26 @@ void OMPIterator<FlowField>::iterate (){
         }
     }
 
+
+    TurbulenceFGHStencil &stencil= (TurbulenceFGHStencil&)_stencil;
+    TurbulenceFGHStencil local_stencil=stencil;
+
+    TurbulentFlowField local_flowfield=Iterator<FlowField>::_flowField;
+
     if (Iterator<FlowField>::_parameters.geometry.dim == 3){	
 	        for (int k = 1 + _lowOffset; k < cellsZ - 1 + _highOffset; k++){
 		    	//black    
-		        #pragma omp parallel for schedule (static)
+		        #pragma omp parallel for schedule (static) firstprivate (local_stencil, local_flowfield)
 		            for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
 		                for (int i = 1 + _lowOffset + (j + (k%2))%2; i < cellsX - 1 + _highOffset; i+=2){
-		                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
+		                    local_stencil.apply ( local_flowfield, i, j, k );
 		                }
 		            }
 			  	//red
-				#pragma omp parallel for schedule (static)
+				#pragma omp parallel for schedule (static) firstprivate (local_stencil, local_flowfield)
 		            for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
 		                for (int i = 2 + _lowOffset - (j + (k%2))%2; i < cellsX - 1 + _highOffset; i+=2){
-		                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
+		                    local_stencil.apply ( local_flowfield, i, j, k );
 		                }
 		            }
 	        }	
