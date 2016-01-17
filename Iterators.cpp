@@ -60,20 +60,23 @@ void OMPIterator<FlowField>::iterate (){
         }
     }
 
+
+    TurbulentFlowField local_flowfield=Iterator<FlowField>::_flowField;
+
     if (Iterator<FlowField>::_parameters.geometry.dim == 3){	
 	        for (int k = 1 + _lowOffset; k < cellsZ - 1 + _highOffset; k++){
 		    	//black    
-		        #pragma omp for schedule (static)
+		        #pragma omp parallel for schedule (static) private(local_flowfield)
 		            for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
 		                for (int i = 1 + _lowOffset + (j + (k%2))%2; i < cellsX - 1 + _highOffset; i+=2){
-		                    apply ( Iterator<FlowField>::_flowField, i, j, k );
+		                    apply ( local_flowfield, i, j, k );
 		                }
 		            }
 			  	//red
-				#pragma omp for schedule (static)
+				#pragma omp parallel for schedule (static) private(local_flowfield)
 		            for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
 		                for (int i = 2 + _lowOffset - (j + (k%2))%2; i < cellsX - 1 + _highOffset; i+=2){
-		                    apply ( Iterator<FlowField>::_flowField, i, j, k );
+		                    apply ( local_flowfield, i, j, k );
 		                }
 		            }
 	        }	
