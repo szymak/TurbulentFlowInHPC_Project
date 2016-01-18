@@ -44,9 +44,9 @@ OMPIterator<FlowField>::OMPIterator (FlowField & flowField, const Parameters& pa
 template<class FlowField>
 void OMPIterator<FlowField>::iterate (){
 
-    const int cellsX = Iterator<FlowField>::_flowField.getCellsX();
-    const int cellsY = Iterator<FlowField>::_flowField.getCellsY();
-    const int cellsZ = Iterator<FlowField>::_flowField.getCellsZ();
+     const int cellsX = Iterator<FlowField>::_flowField.getCellsX();
+     const int cellsY = Iterator<FlowField>::_flowField.getCellsY();
+     const int cellsZ = Iterator<FlowField>::_flowField.getCellsZ();
     // The index k can be used for the 2D and 3D cases.
 
     if (Iterator<FlowField>::_parameters.geometry.dim == 2){
@@ -82,6 +82,10 @@ void OMPIterator<FlowField>::apply (TurbulentFlowField & flowField, int i, int j
     FLOAT _localVelocity           [ 27 * 3];
     FLOAT _localMeshsize           [ 27 * 3];
     FLOAT _localTurbulentViscosity [ 27 * 3];      //    TODO shoud I change it to 27 instead of 27*3
+
+    int th_id = omp_get_thread_num();
+    int cpu_id = sched_getcpu();
+    printf("Apply from thread %d on cpu %d\n", th_id, cpu_id);
 
 
     if ((obstacle & OBSTACLE_SELF) == 0){   // If the cell is fluid

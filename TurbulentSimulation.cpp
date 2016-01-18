@@ -31,26 +31,26 @@ void TurbulentSimulation::solveTimestep(){
 	// compute fgh
 	_turbulentFghIterator.iterate();
 	// set global boundary values
-	//_wallFGHIterator.iterate();
+	_wallFGHIterator.iterate();
 	// compute the right hand side
-	//_rhsIterator.iterate();
+	_rhsIterator.iterate();
 	// solve for pressure
-	//_solver.solve();
+	_solver.solve();
 	// TODO WS2: communicate pressure values
-	//_parallelManagerTurbulent.communicatePressure();
+	_parallelManagerTurbulent.communicatePressure();
 	// compute velocity
-	//_velocityIterator.iterate();
+	_velocityIterator.iterate();
 	// set obstacle boundaries
-	//_obstacleIterator.iterate();
+	_obstacleIterator.iterate();
 	// TODO WS2: communicate velocity values
-	//_parallelManagerTurbulent.communicateVelocity();
+	_parallelManagerTurbulent.communicateVelocity();
 	// Iterate for velocities on the boundary
-	//_wallVelocityIterator.iterate();
+	_wallVelocityIterator.iterate();
 
-	//_parallelManagerTurbulent.communicateCenterLineVelocity();
-	//_turbulentViscosityIterator.iterate();
-	//_parallelManagerTurbulent.communicateViscosity();
-	//_turbulentViscosityBoundaryIterator.iterate();
+	_parallelManagerTurbulent.communicateCenterLineVelocity();
+	_turbulentViscosityIterator.iterate();
+	_parallelManagerTurbulent.communicateViscosity();
+	_turbulentViscosityBoundaryIterator.iterate();
 
     totalTime = timer.getTimeAndRestart();
     if (_parameters.parallel.rank == 0) {

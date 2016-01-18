@@ -7,6 +7,7 @@
 #include <omp.h>
 #include "StencilFunctions.h"
 #include "Definitions.h"
+#include <sched.h>
 
 /** Iterator class
  *
