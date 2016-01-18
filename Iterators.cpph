@@ -83,9 +83,9 @@ void OMPIterator<FlowField>::apply (TurbulentFlowField & flowField, int i, int j
     FLOAT _localMeshsize           [ 27 * 3];
     FLOAT _localTurbulentViscosity [ 27 * 3];      //    TODO shoud I change it to 27 instead of 27*3
 
-    int th_id = omp_get_thread_num();
-    int cpu_id = sched_getcpu();
-    printf("Apply from thread %d on cpu %d\n", th_id, cpu_id);
+   // int th_id = omp_get_thread_num();
+    //int cpu_id = sched_getcpu();
+   // printf("Apply from thread %d on cpu %d\n", th_id, cpu_id);
 
 
     if ((obstacle & OBSTACLE_SELF) == 0){   // If the cell is fluid

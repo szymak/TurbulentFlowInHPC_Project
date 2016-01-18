@@ -24,12 +24,17 @@ void TurbulentSimulation::solveTimestep(){
 	SimpleTimer timer;
     FLOAT totalTime; // Variable to measure elapsed time for each running process
 
-    timer.start();
-
 	// determine and set max. timestep which is allowed in this simulation
 	setTimeStep();
+
+    timer.start();
 	// compute fgh
 	_turbulentFghIterator.iterate();
+
+    totalTime = timer.getTimeAndRestart();
+    if (_parameters.parallel.rank == 0) {
+    	std::cout << "Elapsed time for one time step: " << totalTime << std::endl;
+    }
 	// set global boundary values
 	_wallFGHIterator.iterate();
 	// compute the right hand side
@@ -51,11 +56,6 @@ void TurbulentSimulation::solveTimestep(){
 	_turbulentViscosityIterator.iterate();
 	_parallelManagerTurbulent.communicateViscosity();
 	_turbulentViscosityBoundaryIterator.iterate();
-
-    totalTime = timer.getTimeAndRestart();
-    if (_parameters.parallel.rank == 0) {
-    	std::cout << "Elapsed time for one time step: " << totalTime << std::endl;
-    }
 }
 
 // TODO: Changes for turbulent simulation not implemented yet!
