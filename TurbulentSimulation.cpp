@@ -30,15 +30,22 @@ void TurbulentSimulation::solveTimestep(){
     timer.start();
 	// compute fgh
 	_turbulentFghIterator.iterate();
-
-    totalTime = timer.getTimeAndRestart();
     if (_parameters.parallel.rank == 0) {
-    	std::cout << "Elapsed time for one time step: " << totalTime << std::endl;
+        totalTime = timer.getTimeAndRestart();
+    	std::cout << "FGH time step: " << totalTime << std::endl;
     }
+
 	// set global boundary values
 	_wallFGHIterator.iterate();
+
+    if (_parameters.parallel.rank == 0) {totalTime = timer.getTimeAndRestart();}
 	// compute the right hand side
 	_rhsIterator.iterate();
+    if (_parameters.parallel.rank == 0) {
+        totalTime = timer.getTimeAndRestart();
+    	std::cout << "RHS time step: " << totalTime << std::endl;
+    }
+
 	// solve for pressure
 	_solver.solve();
 	// TODO WS2: communicate pressure values
@@ -53,7 +60,14 @@ void TurbulentSimulation::solveTimestep(){
 	_wallVelocityIterator.iterate();
 
 	_parallelManagerTurbulent.communicateCenterLineVelocity();
+
+    if (_parameters.parallel.rank == 0) {totalTime = timer.getTimeAndRestart();}
 	_turbulentViscosityIterator.iterate();
+    totalTime = timer.getTimeAndRestart();
+    if (_parameters.parallel.rank == 0) {
+    	std::cout << "VISC time step: " << totalTime << std::endl;
+    }
+
 	_parallelManagerTurbulent.communicateViscosity();
 	_turbulentViscosityBoundaryIterator.iterate();
 }

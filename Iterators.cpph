@@ -65,49 +65,11 @@ void OMPIterator<FlowField>::iterate (){
         for (int k = 1 + _lowOffset; k < cellsZ - 1 + _highOffset; k++){
             for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
                 for (int i = 1 + _lowOffset; i < cellsX - 1 + _highOffset; i++){
-                    apply ( Iterator<FlowField>::_flowField, i, j, k );
+                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
                 }
             }
         }
     }  
-}
-
-
-template<class FlowField>
-void OMPIterator<FlowField>::apply (TurbulentFlowField & flowField, int i, int j, int k ){
-
-    const int obstacle = flowField.getFlags().getValue(i, j, k);
-    FLOAT * const values = flowField.getFGH().getVector(i,j,k);
-
-    FLOAT _localVelocity           [ 27 * 3];
-    FLOAT _localMeshsize           [ 27 * 3];
-    FLOAT _localTurbulentViscosity [ 27 * 3];      //    TODO shoud I change it to 27 instead of 27*3
-
-   // int th_id = omp_get_thread_num();
-    //int cpu_id = sched_getcpu();
-   // printf("Apply from thread %d on cpu %d\n", th_id, cpu_id);
-
-
-    if ((obstacle & OBSTACLE_SELF) == 0){   // If the cell is fluid
-
-        loadLocalVelocity3D(  flowField, _localVelocity,                      i, j, k);
-        loadLocalMeshsize3D(Iterator<FlowField>::_parameters, _localMeshsize,                      i, j, k);
-        loadLocalTurbulentViscosity3D ( flowField , _localTurbulentViscosity, i, j, k);
-
-        if ((obstacle & OBSTACLE_RIGHT) == 0) { // If the right cell is fluid
-            values [0] = computeF3DTurbulence(_localVelocity, _localMeshsize,\
-                                              _localTurbulentViscosity, Iterator<FlowField>::_parameters, Iterator<FlowField>::_parameters.timestep.dt);
-        }
-        if ((obstacle & OBSTACLE_TOP) == 0) {
-            values [1] = computeG3DTurbulence(_localVelocity, _localMeshsize,\
-                                              _localTurbulentViscosity, Iterator<FlowField>::_parameters, Iterator<FlowField>::_parameters.timestep.dt);
-        }
-        if ((obstacle & OBSTACLE_BACK) == 0) {
-            values [2] = computeH3DTurbulence(_localVelocity, _localMeshsize,\
-                                              _localTurbulentViscosity, Iterator<FlowField>::_parameters, Iterator<FlowField>::_parameters.timestep.dt);
-        }
-    }
-
 }
 
 template<class FlowField>
