@@ -3,7 +3,10 @@
 
 #include "Stencil.h"
 #include "Parameters.h"
+#include "TurbulentFlowField.h"
 #include <omp.h>
+#include "StencilFunctions.h"
+#include "Definitions.h"
 
 /** Iterator class
  *
@@ -84,6 +87,7 @@ class OMPIterator : public Iterator<FlowField> {
          * boundaries. Lower boundaries are not included.
          */
         void iterate ();
+        void apply (TurbulentFlowField & flowField, int i, int j, int k );
 };
 
 
@@ -160,6 +164,6 @@ class ParallelBoundaryIterator : public Iterator<FlowField> {
                                  int lowOffset = 0, int highOffset = 0);
         void iterate();
 };
-#include "Iterators.cpp"
+#include "Iterators.cpph"
 
 #endif
