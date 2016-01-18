@@ -87,20 +87,20 @@ void OMPIterator<FlowField>::apply (TurbulentFlowField & flowField, int i, int j
     if ((obstacle & OBSTACLE_SELF) == 0){   // If the cell is fluid
 
         loadLocalVelocity3D(  flowField, _localVelocity,                      i, j, k);
-        loadLocalMeshsize3D(_parameters, _localMeshsize,                      i, j, k);
+        loadLocalMeshsize3D(Iterator<FlowField>::_parameters, _localMeshsize,                      i, j, k);
         loadLocalTurbulentViscosity3D ( flowField , _localTurbulentViscosity, i, j, k);
 
         if ((obstacle & OBSTACLE_RIGHT) == 0) { // If the right cell is fluid
             values [0] = computeF3DTurbulence(_localVelocity, _localMeshsize,\
-                                              _localTurbulentViscosity, _parameters, _parameters.timestep.dt);
+                                              _localTurbulentViscosity, Iterator<FlowField>::_parameters, Iterator<FlowField>::_parameters.timestep.dt);
         }
         if ((obstacle & OBSTACLE_TOP) == 0) {
             values [1] = computeG3DTurbulence(_localVelocity, _localMeshsize,\
-                                              _localTurbulentViscosity, _parameters, _parameters.timestep.dt);
+                                              _localTurbulentViscosity, Iterator<FlowField>::_parameters, Iterator<FlowField>::_parameters.timestep.dt);
         }
         if ((obstacle & OBSTACLE_BACK) == 0) {
             values [2] = computeH3DTurbulence(_localVelocity, _localMeshsize,\
-                                              _localTurbulentViscosity, _parameters, _parameters.timestep.dt);
+                                              _localTurbulentViscosity, Iterator<FlowField>::_parameters, Iterator<FlowField>::_parameters.timestep.dt);
         }
     }
 
