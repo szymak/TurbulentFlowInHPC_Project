@@ -52,7 +52,8 @@ void OMPIterator<FlowField>::iterate (){
     if (Iterator<FlowField>::_parameters.geometry.dim == 2){
 
         // Loop without lower boundaries. These will be dealt with by the global boundary stencils
-        // or by the subdomain boundary iterators.
+        // or by the subdomain boundary iterators.		
+	#pragma omp parallel for schedule(static)
         for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
             for (int i = 1 + _lowOffset; i < cellsX - 1 + _highOffset; i++){
                 _stencil.apply ( Iterator<FlowField>::_flowField, i, j );
