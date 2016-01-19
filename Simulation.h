@@ -1,6 +1,12 @@
 #ifndef _SIMULATION_H_
 #define _SIMULATION_H_
 
+#define FGH 0
+#define RHS 1
+#define VELO 2
+#define OBST 3
+#define VISC 4
+
 #include <petscksp.h>
 #include <float.h>
 #include <string>
@@ -47,12 +53,12 @@ class Simulation {
     FieldIterator<FlowField> _fghIterator;
 
     RHSStencil _rhsStencil;
-    FieldIterator<FlowField> _rhsIterator;
+    OMPFieldIterator<FlowField> _rhsIterator;
 
     VelocityStencil _velocityStencil;
     ObstacleStencil _obstacleStencil;
-    FieldIterator<FlowField> _velocityIterator;
-    FieldIterator<FlowField> _obstacleIterator;
+    OMPRedBlackFieldIterator<FlowField> _velocityIterator;
+    OMPRedBlackFieldIterator<FlowField> _obstacleIterator;
     
     VTKStencil _vtkStencil;
     FieldIterator<FlowField> _vtkIterator;
@@ -61,6 +67,8 @@ class Simulation {
     
     PetscParallelManager _parallelManager;
 
+    //average time measurements
+    FLOAT iterator_times[5];
 
   public:
     Simulation(Parameters &parameters, FlowField &flowField):
@@ -205,6 +213,15 @@ class Simulation {
 
       _parameters.timestep.dt = globalMin;
       _parameters.timestep.dt *= _parameters.timestep.tau;
+    }
+
+  public:
+    FLOAT getIteratorMeasurement(int n) {
+    	return iterator_times[n];
+    }
+
+    void setIteratorMeasurement(int n, FLOAT value) {
+    	iterator_times[n] = value;
     }
 
 };

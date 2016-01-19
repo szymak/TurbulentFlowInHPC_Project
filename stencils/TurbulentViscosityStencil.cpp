@@ -36,6 +36,11 @@ TurbulentViscosityStencil::~TurbulentViscosityStencil () {
 }
 
 void TurbulentViscosityStencil::apply ( TurbulentFlowField & flowField, int i, int j ) {
+	
+//	FLOAT _localVelocity [ 27 * 3 ];
+        // local meshsize
+//      FLOAT _localMeshsize [ 27 * 3 ];
+//      MixingLengthModel * _mixingLength;
 
 	FLOAT lm = _mixingLength->at(flowField, i, j);
 	loadLocalVelocity2D(  flowField, _localVelocity, i, j);
@@ -47,6 +52,11 @@ void TurbulentViscosityStencil::apply ( TurbulentFlowField & flowField, int i, i
 }
 
 void TurbulentViscosityStencil::apply ( TurbulentFlowField & flowField, int i, int j, int k ) {
+
+//      FLOAT _localVelocity [ 27 * 3 ];
+        // local meshsize
+//       FLOAT _localMeshsize [ 27 * 3 ];
+//      MixingLengthModel * _mixingLength;
 
 	FLOAT lm = _mixingLength->at(flowField, i, j, k);
 	loadLocalVelocity3D(  flowField, _localVelocity, i, j, k);

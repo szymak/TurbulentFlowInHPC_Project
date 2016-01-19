@@ -95,6 +95,10 @@ int main (int argc, char *argv[]) {
     simulation->plotVTK(timeSteps, foldername.str());
     timeVTKOut += parameters.vtk.interval;
 
+    for(int i=0;i<5;i++) {
+    	simulation->setIteratorMeasurement(i, 0);
+    }
+
     // START: measure program time
     if (rank == 0) {   
     	timer.start(); 
@@ -127,6 +131,11 @@ int main (int argc, char *argv[]) {
     if (rank == 0) {
         totalTime = timer.getTimeAndRestart();
     	std::cout << "TOTAL TIME(" << nproc << "): " << totalTime  << std::endl;
+    	std::cout << "TOTAL FGH TIME(" << nproc << "): " << simulation->getIteratorMeasurement(FGH)/timeSteps  << std::endl;
+    	std::cout << "TOTAL RHS TIME(" << nproc << "): " << simulation->getIteratorMeasurement(RHS)/timeSteps  << std::endl;
+    	std::cout << "TOTAL VELO TIME(" << nproc << "): " << simulation->getIteratorMeasurement(VELO)/timeSteps  << std::endl;
+    	std::cout << "TOTAL OBST TIME(" << nproc << "): " << simulation->getIteratorMeasurement(OBST)/timeSteps  << std::endl;
+    	std::cout << "TOTAL VISC TIME(" << nproc << "): " << simulation->getIteratorMeasurement(VISC)/timeSteps  << std::endl;
     }
     // TODO WS1: plot final output
     simulation->plotVTK(timeSteps, foldername.str());

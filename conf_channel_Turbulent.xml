@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     <flow Re="1000" />
-    <simulation finalTime="10.0" >
+    <simulation finalTime="10" >
       <type>turbulence</type>
       <boundary_layer>turbulent</boundary_layer>
         <scenario>channel</scenario>
@@ -12,7 +12,7 @@
     <geometry
       dim="3"
       lengthX="5.0" lengthY="1.0" lengthZ="1.0"
-      sizeX="128" sizeY="8" sizeZ="8"
+      sizeX="64" sizeY="8" sizeZ="8"
       stretchX="false" stretchY="true" stretchZ="true"
     >
       <mesh>uniform</mesh>

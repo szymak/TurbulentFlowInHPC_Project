@@ -27,33 +27,50 @@ void TurbulentSimulation::solveTimestep(){
 	// determine and set max. timestep which is allowed in this simulation
 	setTimeStep();
 
-    timer.start();
 	// compute fgh
+	if (_parameters.parallel.rank == 0) {timer.start();}
 	_turbulentFghIterator.iterate();
     if (_parameters.parallel.rank == 0) {
         totalTime = timer.getTimeAndRestart();
-    	std::cout << "FGH time step: " << totalTime << std::endl;
+        //std::cout << "FGH time step: " << totalTime << std::endl;
+        iterator_times[FGH] += totalTime;
     }
 
 	// set global boundary values
 	_wallFGHIterator.iterate();
 
-    if (_parameters.parallel.rank == 0) {totalTime = timer.getTimeAndRestart();}
 	// compute the right hand side
+    if (_parameters.parallel.rank == 0) {totalTime = timer.getTimeAndRestart();}
 	_rhsIterator.iterate();
     if (_parameters.parallel.rank == 0) {
         totalTime = timer.getTimeAndRestart();
-    	std::cout << "RHS time step: " << totalTime << std::endl;
+        //std::cout << "RHS time step: " << totalTime << std::endl;
+        iterator_times[RHS] += totalTime;
     }
 
 	// solve for pressure
 	_solver.solve();
 	// TODO WS2: communicate pressure values
 	_parallelManagerTurbulent.communicatePressure();
+
+    if (_parameters.parallel.rank == 0) {totalTime = timer.getTimeAndRestart();}
 	// compute velocity
 	_velocityIterator.iterate();
+    if (_parameters.parallel.rank == 0) {
+        totalTime = timer.getTimeAndRestart();
+        //std::cout << "VELO time step: " << totalTime << std::endl;
+        iterator_times[VELO] += totalTime;
+    }
+
+    if (_parameters.parallel.rank == 0) {totalTime = timer.getTimeAndRestart();}
 	// set obstacle boundaries
 	_obstacleIterator.iterate();
+    if (_parameters.parallel.rank == 0) {
+        totalTime = timer.getTimeAndRestart();
+        //std::cout << "OBST time step: " << totalTime << std::endl;
+        iterator_times[OBST] += totalTime;
+    }
+
 	// TODO WS2: communicate velocity values
 	_parallelManagerTurbulent.communicateVelocity();
 	// Iterate for velocities on the boundary
@@ -63,9 +80,10 @@ void TurbulentSimulation::solveTimestep(){
 
     if (_parameters.parallel.rank == 0) {totalTime = timer.getTimeAndRestart();}
 	_turbulentViscosityIterator.iterate();
-    totalTime = timer.getTimeAndRestart();
     if (_parameters.parallel.rank == 0) {
-    	std::cout << "VISC time step: " << totalTime << std::endl;
+        totalTime = timer.getTimeAndRestart();
+        //std::cout << "VISC time step: " << totalTime << std::endl;
+        iterator_times[VISC] += totalTime;
     }
 
 	_parallelManagerTurbulent.communicateViscosity();
