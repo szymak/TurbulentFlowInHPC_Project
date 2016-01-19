@@ -219,6 +219,10 @@ class Simulation {
     	return iterator_times[n];
     }
 
+    void setIteratorMeasurement(int n, FLOAT value) {
+    	iterator_times[n] = value;
+    }
+
 };
 
 #endif // _SIMULATION_H_

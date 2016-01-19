@@ -96,7 +96,7 @@ int main (int argc, char *argv[]) {
     timeVTKOut += parameters.vtk.interval;
 
     for(int i=0;i<5;i++) {
-    	simulation->iterator_times[i] = 0;
+    	simulation->setIteratorMeasurement(i, 0);
     }
 
     // START: measure program time
