@@ -116,7 +116,7 @@ OMPRedBlackFieldIterator<FlowField>::OMPRedBlackFieldIterator (FlowField & flowF
                                int lowOffset, int highOffset):
     Iterator<FlowField>(flowField,parameters), _stencil(stencil), _lowOffset(lowOffset), _highOffset(highOffset){}
 
-
+template<class FlowField>
 void OMPRedBlackFieldIterator<FlowField>::iterate (){
  
      const int cellsX = Iterator<FlowField>::_flowField.getCellsX();

@@ -215,6 +215,7 @@ class Simulation {
       _parameters.timestep.dt *= _parameters.timestep.tau;
     }
 
+  public:
     FLOAT getIteratorMeasurement(int n) {
     	return iterator_times[n];
     }
