@@ -57,8 +57,8 @@ class Simulation {
 
     VelocityStencil _velocityStencil;
     ObstacleStencil _obstacleStencil;
-    OMPRedBlackFieldIterator<FlowField> _velocityIterator;
-    OMPRedBlackFieldIterator<FlowField> _obstacleIterator;
+    OMPFieldIterator<FlowField> _velocityIterator;
+    OMPFieldIterator<FlowField> _obstacleIterator;
     
     VTKStencil _vtkStencil;
     FieldIterator<FlowField> _vtkIterator;
