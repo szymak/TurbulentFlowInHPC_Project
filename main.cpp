@@ -131,11 +131,11 @@ int main (int argc, char *argv[]) {
     if (rank == 0) {
         totalTime = timer.getTimeAndRestart();
     	std::cout << "TOTAL TIME(" << nproc << "): " << totalTime  << std::endl;
-    	std::cout << "TOTAL FGH TIME(" << nproc << "): " << simulation->iterator_times[FGH]/timeSteps  << std::endl;
-    	std::cout << "TOTAL RHS TIME(" << nproc << "): " << simulation->iterator_times[RHS]/timeSteps  << std::endl;
-    	std::cout << "TOTAL VELO TIME(" << nproc << "): " << simulation->iterator_times[VELO]/timeSteps  << std::endl;
-    	std::cout << "TOTAL OBST TIME(" << nproc << "): " << simulation->iterator_times[OBST]/timeSteps  << std::endl;
-    	std::cout << "TOTAL VISC TIME(" << nproc << "): " << simulation->iterator_times[VISC]/timeSteps  << std::endl;
+    	std::cout << "TOTAL FGH TIME(" << nproc << "): " << simulation->getIteratorMeasurement(FGH)/timeSteps  << std::endl;
+    	std::cout << "TOTAL RHS TIME(" << nproc << "): " << simulation->getIteratorMeasurement(RHS)/timeSteps  << std::endl;
+    	std::cout << "TOTAL VELO TIME(" << nproc << "): " << simulation->getIteratorMeasurement(VELO)/timeSteps  << std::endl;
+    	std::cout << "TOTAL OBST TIME(" << nproc << "): " << simulation->getIteratorMeasurement(OBST)/timeSteps  << std::endl;
+    	std::cout << "TOTAL VISC TIME(" << nproc << "): " << simulation->getIteratorMeasurement(VISC)/timeSteps  << std::endl;
     }
     // TODO WS1: plot final output
     simulation->plotVTK(timeSteps, foldername.str());
