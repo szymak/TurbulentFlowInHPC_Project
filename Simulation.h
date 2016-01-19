@@ -47,12 +47,12 @@ class Simulation {
     FieldIterator<FlowField> _fghIterator;
 
     RHSStencil _rhsStencil;
-    FieldIterator<FlowField> _rhsIterator;
+    OMPFieldIterator<FlowField> _rhsIterator;
 
     VelocityStencil _velocityStencil;
     ObstacleStencil _obstacleStencil;
-    FieldIterator<FlowField> _velocityIterator;
-    FieldIterator<FlowField> _obstacleIterator;
+    OMPRedBlackFieldIterator<FlowField> _velocityIterator;
+    OMPRedBlackFieldIterator<FlowField> _obstacleIterator;
     
     VTKStencil _vtkStencil;
     FieldIterator<FlowField> _vtkIterator;

@@ -64,7 +64,7 @@ class FieldIterator : public Iterator<FlowField> {
 };
 
 template<class FlowField>
-class OMPIterator : public Iterator<FlowField> {
+class OMPFieldIterator : public Iterator<FlowField> {
 
     private:
 
@@ -79,7 +79,7 @@ class OMPIterator : public Iterator<FlowField> {
 
     public:
 
-        OMPIterator (FlowField & flowField, const Parameters& parameters, FieldStencil<FlowField> & stencil,
+        OMPFieldIterator (FlowField & flowField, const Parameters& parameters, FieldStencil<FlowField> & stencil,
                        int lowOffset = 0, int highOffset = 0);
 
         /** Volume iteration over the field.
@@ -89,6 +89,33 @@ class OMPIterator : public Iterator<FlowField> {
          */
         void iterate ();
         void apply (TurbulentFlowField & flowField, int i, int j, int k );
+};
+
+template<class FlowField>
+class OMPRedBlackFieldIterator : public Iterator<FlowField> {
+
+    private:
+
+        FieldStencil<FlowField> & _stencil;         //! Reference to a stencil
+
+        //@brief Define the iteration domain to include more or less layers
+        // Added since the ability to select the iteration domain provides more flexibility
+        //@{
+        const int _lowOffset;
+        const int _highOffset;
+        //@}
+
+    public:
+
+        OMPRedBlackFieldIterator (FlowField & flowField, const Parameters& parameters, FieldStencil<FlowField> & stencil,
+                       int lowOffset = 0, int highOffset = 0);
+
+        /** Volume iteration over the field.
+         *
+         * Volume iteration. The stencil will be applied to all cells in the domain plus the upper
+         * boundaries. Lower boundaries are not included.
+         */
+        void iterate ();
 };
 
 

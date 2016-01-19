@@ -14,16 +14,16 @@ class TurbulentSimulation : public Simulation {
 
 	protected:
 		TurbulentFlowField &_turbulentFlowField;
-    	OMPIterator<TurbulentFlowField> _turbulentFghIterator;
+	    	OMPFieldIterator<TurbulentFlowField> _turbulentFghIterator;
 		TurbulenceFGHStencil _turbulentFghStencil;
-    	FieldIterator<TurbulentFlowField> _turbulentVtkIterator;
+	    	FieldIterator<TurbulentFlowField> _turbulentVtkIterator;
 		TurbulentVTKStencil _turbulentVtkStencil;
 		TurbulentViscosityStencil _turbulentViscosityStencil;
-	FieldIterator <TurbulentFlowField>	_turbulentViscosityIterator;
+		FieldIterator <TurbulentFlowField>	_turbulentViscosityIterator;
 		MaxNuStencil _maxNuStencil;
 		FieldIterator<TurbulentFlowField> _maxNuFieldIterator;
-        GlobalBoundaryIterator<TurbulentFlowField> _maxNuBoundaryIterator;
-        GlobalBoundaryIterator<TurbulentFlowField> _turbulentViscosityBoundaryIterator;
+	        GlobalBoundaryIterator<TurbulentFlowField> _maxNuBoundaryIterator;
+	        GlobalBoundaryIterator<TurbulentFlowField> _turbulentViscosityBoundaryIterator;
 		TurbulentViscosityBoundaryStencil _turbulentViscosityBoundaryStencil;
 		PetscParallelManagerTurbulent _parallelManagerTurbulent;
 

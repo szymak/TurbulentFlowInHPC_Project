@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <configuration>
     <flow Re="1000" />
-    <simulation finalTime="0.5" >
+    <simulation finalTime="10" >
       <type>turbulence</type>
       <boundary_layer>turbulent</boundary_layer>
         <scenario>channel</scenario>

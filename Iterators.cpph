@@ -36,13 +36,13 @@ void FieldIterator<FlowField>::iterate (){
 
 
 template<class FlowField>
-OMPIterator<FlowField>::OMPIterator (FlowField & flowField, const Parameters& parameters, FieldStencil<FlowField> & stencil,
+OMPFieldIterator<FlowField>::OMPFieldIterator (FlowField & flowField, const Parameters& parameters, FieldStencil<FlowField> & stencil,
                                int lowOffset, int highOffset):
     Iterator<FlowField>(flowField,parameters), _stencil(stencil), _lowOffset(lowOffset), _highOffset(highOffset){}
 
 
 template<class FlowField>
-void OMPIterator<FlowField>::iterate (){
+void OMPFieldIterator<FlowField>::iterate (){
 
      const int cellsX = Iterator<FlowField>::_flowField.getCellsX();
      const int cellsY = Iterator<FlowField>::_flowField.getCellsY();
@@ -66,7 +66,7 @@ void OMPIterator<FlowField>::iterate (){
         for (int k = 1 + _lowOffset; k < cellsZ - 1 + _highOffset; k++){
             for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
                 for (int i = 1 + _lowOffset; i < cellsX - 1 + _highOffset; i++){
-                    apply ( Iterator<FlowField>::_flowField, i, j, k );
+                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
                 }
             }
         }
@@ -75,7 +75,7 @@ void OMPIterator<FlowField>::iterate (){
 
 
 template<class FlowField>
-void OMPIterator<FlowField>::apply (TurbulentFlowField & flowField, int i, int j, int k ){
+void OMPFieldIterator<FlowField>::apply (TurbulentFlowField & flowField, int i, int j, int k ){
 
     const int obstacle = flowField.getFlags().getValue(i, j, k);
     FLOAT * const values = flowField.getFGH().getVector(i,j,k);
@@ -110,6 +110,53 @@ void OMPIterator<FlowField>::apply (TurbulentFlowField & flowField, int i, int j
     }
 
 }
+
+template<class FlowField>
+OMPRedBlackFieldIterator<FlowField>::OMPRedBlackFieldIterator (FlowField & flowField, const Parameters& parameters, FieldStencil<FlowField> & stencil,
+                               int lowOffset, int highOffset):
+    Iterator<FlowField>(flowField,parameters), _stencil(stencil), _lowOffset(lowOffset), _highOffset(highOffset){}
+
+
+void OMPRedBlackFieldIterator<FlowField>::iterate (){
+ 
+     const int cellsX = Iterator<FlowField>::_flowField.getCellsX();
+     const int cellsY = Iterator<FlowField>::_flowField.getCellsY();
+     const int cellsZ = Iterator<FlowField>::_flowField.getCellsZ();
+     // The index k can be used for the 2D and 3D cases.
+ 
+     if (Iterator<FlowField>::_parameters.geometry.dim == 2){
+ 
+         // Loop without lower boundaries. These will be dealt with by the global boundary stencils
+         // or by the subdomain boundary iterators.
+         for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
+             for (int i = 1 + _lowOffset; i < cellsX - 1 + _highOffset; i++){
+                 _stencil.apply ( Iterator<FlowField>::_flowField, i, j );
+             }
+         }
+     }
+ 
+    if (Iterator<FlowField>::_parameters.geometry.dim == 3){
+	
+        for (int k = 1 + _lowOffset; k < cellsZ - 1 + _highOffset; k++){
+	    	//black   
+	        #pragma omp parallel for schedule (static)
+	            for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
+	                for (int i = 1 + _lowOffset + (j + (k%2))%2; i < cellsX - 1 + _highOffset; i+=2){
+	                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
+	                }
+	            }
+		//red
+		#pragma omp  parallel for schedule (static)
+	            for (int j = 1 + _lowOffset; j < cellsY - 1 + _highOffset; j++){
+	                for (int i = 2 + _lowOffset - (j + (k%2))%2; i < cellsX - 1 + _highOffset; i+=2){
+	                    _stencil.apply ( Iterator<FlowField>::_flowField, i, j, k );
+	                }
+	            }
+        }
+    }
+     
+}
+
 
 template<class FlowField>
 GlobalBoundaryIterator<FlowField>::GlobalBoundaryIterator(FlowField & flowField,
