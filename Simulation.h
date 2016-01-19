@@ -1,6 +1,12 @@
 #ifndef _SIMULATION_H_
 #define _SIMULATION_H_
 
+#define FGH 0
+#define RHS 1
+#define VELO 2
+#define OBST 3
+#define VISC 4
+
 #include <petscksp.h>
 #include <float.h>
 #include <string>
@@ -61,6 +67,8 @@ class Simulation {
     
     PetscParallelManager _parallelManager;
 
+    //average time measurements
+    FLOAT iterator_times[5];
 
   public:
     Simulation(Parameters &parameters, FlowField &flowField):
