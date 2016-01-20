@@ -129,8 +129,12 @@ int main (int argc, char *argv[]) {
 
     // STOP: finish measurement
     if (rank == 0) {
+        #pragma omp parallel
+	{
+        if (omp_get_thread_num()==0)
+            std::cout << "TOTAL OpenMP threads: " << omp_get_num_threads()  << std::endl;
+        }
         totalTime = timer.getTimeAndRestart();
-        std::cout << "TOTAL OpenMP threads: " << omp_get_num_threads()  << std::endl;
     	std::cout << "TOTAL TIME(" << nproc << "): " << totalTime  << std::endl;
     	std::cout << "TOTAL FGH TIME(" << nproc << "): " << simulation->getIteratorMeasurement(FGH)/timeSteps  << std::endl;
     	std::cout << "TOTAL RHS TIME(" << nproc << "): " << simulation->getIteratorMeasurement(RHS)/timeSteps  << std::endl;
