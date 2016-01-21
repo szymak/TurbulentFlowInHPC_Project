@@ -19,7 +19,7 @@ class TurbulentSimulation : public Simulation {
 	    	FieldIterator<TurbulentFlowField> _turbulentVtkIterator;
 		TurbulentVTKStencil _turbulentVtkStencil;
 		TurbulentViscosityStencil _turbulentViscosityStencil;
-		OMPFieldIterator <TurbulentFlowField>	_turbulentViscosityIterator;
+		FieldIterator <TurbulentFlowField>	_turbulentViscosityIterator;
 		MaxNuStencil _maxNuStencil;
 		FieldIterator<TurbulentFlowField> _maxNuFieldIterator;
 	        GlobalBoundaryIterator<TurbulentFlowField> _maxNuBoundaryIterator;
