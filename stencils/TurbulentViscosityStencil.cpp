@@ -37,10 +37,24 @@ TurbulentViscosityStencil::~TurbulentViscosityStencil () {
 
 void TurbulentViscosityStencil::apply ( TurbulentFlowField & flowField, int i, int j ) {
 	
-//	FLOAT _localVelocity [ 27 * 3 ];
-        // local meshsize
-//      FLOAT _localMeshsize [ 27 * 3 ];
-//      MixingLengthModel * _mixingLength;
+	FLOAT _localVelocity [ 27 * 3 ];
+        //local meshsize
+      FLOAT _localMeshsize [ 27 * 3 ];
+      MixingLengthModel * _mixingLength;
+	if(_parameters.simulation.scenario == "channel" && (_parameters.bfStep.xRatio <= 0 || _parameters.bfStep.yRatio <= 0)) {
+		if (_parameters.turbulence.boundary_layer_equation == "laminar") {
+			_mixingLength = new LmLaminarFlatPlate(_parameters);
+		} else if(_parameters.turbulence.boundary_layer_equation == "turbulent") {
+			_mixingLength = new LmTurbulentFlatPlate(_parameters);
+		} else if(_parameters.turbulence.boundary_layer_equation == "kh") {
+			_mixingLength = new LmKh(_parameters);
+		}
+	} else {
+		_mixingLength = new LmKh(_parameters);
+		if(_parameters.turbulence.boundary_layer_equation != "kh") {
+	//		std::cout << "!!! Warning: Using Lm = Kh as mixing length" << std::endl;
+		}
+	}
 
 	FLOAT lm = _mixingLength->at(flowField, i, j);
 	loadLocalVelocity2D(  flowField, _localVelocity, i, j);
@@ -53,10 +67,24 @@ void TurbulentViscosityStencil::apply ( TurbulentFlowField & flowField, int i, i
 
 void TurbulentViscosityStencil::apply ( TurbulentFlowField & flowField, int i, int j, int k ) {
 
-//      FLOAT _localVelocity [ 27 * 3 ];
+      FLOAT _localVelocity [ 27 * 3 ];
         // local meshsize
-//       FLOAT _localMeshsize [ 27 * 3 ];
-//      MixingLengthModel * _mixingLength;
+       FLOAT _localMeshsize [ 27 * 3 ];
+      MixingLengthModel * _mixingLength;
+	if(_parameters.simulation.scenario == "channel" && (_parameters.bfStep.xRatio <= 0 || _parameters.bfStep.yRatio <= 0)) {
+		if (_parameters.turbulence.boundary_layer_equation == "laminar") {
+			_mixingLength = new LmLaminarFlatPlate(_parameters);
+		} else if(_parameters.turbulence.boundary_layer_equation == "turbulent") {
+			_mixingLength = new LmTurbulentFlatPlate(_parameters);
+		} else if(_parameters.turbulence.boundary_layer_equation == "kh") {
+			_mixingLength = new LmKh(_parameters);
+		}
+	} else {
+		_mixingLength = new LmKh(_parameters);
+		if(_parameters.turbulence.boundary_layer_equation != "kh") {
+	//		std::cout << "!!! Warning: Using Lm = Kh as mixing length" << std::endl;
+		}
+	}
 
 	FLOAT lm = _mixingLength->at(flowField, i, j, k);
 	loadLocalVelocity3D(  flowField, _localVelocity, i, j, k);
