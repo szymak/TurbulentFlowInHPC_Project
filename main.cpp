@@ -99,6 +99,8 @@ int main (int argc, char *argv[]) {
     	simulation->setIteratorMeasurement(i, 0);
     }
 
+    simulation->setPetscMeasurement(0);
+
     // START: measure program time
     if (rank == 0) {   
     	timer.start(); 
@@ -136,6 +138,7 @@ int main (int argc, char *argv[]) {
         }
         totalTime = timer.getTimeAndRestart();
     	std::cout << "TOTAL TIME(" << nproc << "): " << totalTime  << std::endl;
+       	std::cout << "PETSC TIME(" << nproc << "): " << simulation->getPetscMeasurement()  << std::endl;
     	std::cout << "TOTAL FGH TIME(" << nproc << "): " << simulation->getIteratorMeasurement(FGH)/timeSteps  << std::endl;
     	std::cout << "TOTAL RHS TIME(" << nproc << "): " << simulation->getIteratorMeasurement(RHS)/timeSteps  << std::endl;
     	std::cout << "TOTAL VELO TIME(" << nproc << "): " << simulation->getIteratorMeasurement(VELO)/timeSteps  << std::endl;

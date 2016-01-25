@@ -22,7 +22,8 @@ TurbulentSimulation::TurbulentSimulation(Parameters &parameters, TurbulentFlowFi
 // TODO: Changes for turbulent simulation not implemented yet!
 void TurbulentSimulation::solveTimestep(){
 	SimpleTimer timer;
-    FLOAT totalTime; // Variable to measure elapsed time for each running process
+        FLOAT time_beforePetsc, time_Petsc, totalTime; // Variables to measure elapsed time for each running process
+
 
 	// determine and set max. timestep which is allowed in this simulation
 	setTimeStep();
@@ -47,9 +48,11 @@ void TurbulentSimulation::solveTimestep(){
         //std::cout << "RHS time step: " << totalTime << std::endl;
         iterator_times[RHS] += totalTime;
     }
-
 	// solve for pressure
+        time_beforePetsc = timer.getTimeAndRestart();
 	_solver.solve();
+        time_Petsc += timer.getTimeAndRestart();
+
 	// TODO WS2: communicate pressure values
 	_parallelManagerTurbulent.communicatePressure();
 

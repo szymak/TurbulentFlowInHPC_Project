@@ -34,9 +34,11 @@ FLOAT computeVelocity2D (FlowField & flowField, int i, int j, FLOAT stepSize,
 
         const FLOAT y = posY+0.5*dy - stepSize;
 
-        // DMITRIIS VERSION: for turbulence, please use: return parameters.walls.vectorLeft[0];
-        return 6.0 * parameters.walls.vectorLeft[0] /
-                     (inletYSize * inletYSize) * y * (inletYSize - y);
+        // DMITRIIS VERSION: for turbulence, please use: vreturn parameters.walls.vectorLeft[0];
+        //return 6.0 * parameters.walls.vectorLeft[0] /
+        //             (inletYSize * inletYSize) * y * (inletYSize - y);
+	return parameters.walls.vectorLeft[0];
+
     } else {
         return 0.0;
     }

@@ -224,6 +224,16 @@ class Simulation {
     	iterator_times[n] = value;
     }
 
+    FLOAT getPetscMeasurement() {
+	return _petsc_time;
+    }
+
+    void setPetscMeasurement(FLOAT value) {
+    	_petsc_time = value;
+	    }
+  private:
+	FLOAT _petsc_time;
+
 };
 
 #endif // _SIMULATION_H_
