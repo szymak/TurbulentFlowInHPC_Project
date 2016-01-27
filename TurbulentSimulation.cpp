@@ -51,7 +51,7 @@ void TurbulentSimulation::solveTimestep(){
 	// solve for pressure
         time_beforePetsc = timer.getTimeAndRestart();
 	_solver.solve();
-        time_Petsc += timer.getTimeAndRestart();
+        _petsc_time += timer.getTimeAndRestart();
 
 	// TODO WS2: communicate pressure values
 	_parallelManagerTurbulent.communicatePressure();

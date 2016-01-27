@@ -231,7 +231,7 @@ class Simulation {
     void setPetscMeasurement(FLOAT value) {
     	_petsc_time = value;
 	    }
-  private:
+  protected:
 	FLOAT _petsc_time;
 
 };
