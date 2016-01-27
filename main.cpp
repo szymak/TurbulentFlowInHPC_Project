@@ -138,7 +138,8 @@ int main (int argc, char *argv[]) {
         }
         totalTime = timer.getTimeAndRestart();
     	std::cout << "TOTAL TIME(" << nproc << "): " << totalTime  << std::endl;
-       	std::cout << "PETSC TIME(" << nproc << "): " << simulation->getPetscMeasurement()  << std::endl;
+       	std::cout << "TOTAL PETSC TIME(" << nproc << "): " << simulation->getPetscMeasurement()  << std::endl;
+	std::cout << "TOTAL TIME WITHOUT PETSC(" << nproc << "): " << totalTime - simulation->getPetscMeasurement() << std::endl;
     	std::cout << "TOTAL FGH TIME(" << nproc << "): " << simulation->getIteratorMeasurement(FGH)/timeSteps  << std::endl;
     	std::cout << "TOTAL RHS TIME(" << nproc << "): " << simulation->getIteratorMeasurement(RHS)/timeSteps  << std::endl;
     	std::cout << "TOTAL VELO TIME(" << nproc << "): " << simulation->getIteratorMeasurement(VELO)/timeSteps  << std::endl;
